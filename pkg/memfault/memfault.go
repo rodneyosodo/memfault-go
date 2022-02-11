@@ -5,7 +5,9 @@ package memfault
 
 import (
     "encoding/base64"
+    "encoding/json"
     "errors"
+    "fmt"
     "io/ioutil"
     "net/http"
     "time"
@@ -18,30 +20,45 @@ var _ SDK = (*mfSDK)(nil)
 
 // SDK contains Mainflux API.
 type SDK interface {
-    // GetMe
-    GetMe() (string, error)
+    // GetMe Return information about the logged in User
+    GetMe() (UserRes, error)
 
     // Generate a user api key
-    GenerateUserApiKey() (string, error)
+    GenerateUserAPIKey() (UserAPIKeyRes, error)
 
-    // Get the issued user api key
-    GetUserApiKey() (string, error)
+    // Get a previously generated API Key for the logged in User
+    GetUserAPIKey() (UserAPIKeyRes, error)
 
-    // Deletes the issued user api key
-    DeleteUserApiKey() (string, error)
+    // Invalidate the previously generated API Key for the logged in User and do not create another one
+    DeleteUserAPIKey() (string, error)
 
-    // Gets the organization slug
-    GetOrganizationSlug(multiple bool) (string, error)
+    // Creates a Project under the given Organization
+    CreateProject(project Project) (CreateProjectRes, error)
 
-    // Creates project
-    CreateProject(project Project) (string, error)
+    // List the Projects under a given Organization
+    ListProject() (ListProjectRes, error)
+
+    // Retrieves a Project under a given Organization
+    RetrieveProject(projectSlug string) (CreateProjectRes, error)
+
+    // Update a Project under a given Organization
+    UpdateProject(project Project) (CreateProjectRes, error)
+
+    // Delete a Project under a given Organization
+    DeleteProject(project Project) (string, error)
+
+    // Return the Project Client Key
+    GetProjectClientKey(projectSlug string) (UserAPIKeyRes, error)
+
+    // Regenerate the Project Client Key
+    RefreshProjectClientKey(projectSlug string) (UserAPIKeyRes, error)
 }
 
 // Credentials contains the credentials
 type Credentials struct {
     Email             string `json:"email"`
     Password          string `json:"password"`
-    ApiKey            string `json:"api_key"`
+    APIKey            string `json:"api_key"`
     OrganisationToken string `json:"organisation_token"`
     ProjectKey        string `json:"project_key"`
 }
@@ -58,7 +75,7 @@ type mfSDK struct {
 
 // Config contains sdk configuration parameters.
 type Config struct {
-    ApiURL      string
+    APIURL      string
     ChunksURL   string
     IngressURL  string
     FilesURL    string
@@ -68,6 +85,7 @@ type Config struct {
     IdleConnTimeout time.Duration
 }
 
+// Project struct
 type Project struct {
     Name     string `json:"name"`
     Slug     string `json:"slug"`
@@ -78,7 +96,7 @@ type Project struct {
 // NewSDK returns new mainflux SDK instance.
 func NewSDK(conf Config) SDK {
     return &mfSDK{
-        apiURL:      conf.ApiURL,
+        apiURL:      conf.APIURL,
         chunksURL:   conf.ChunksURL,
         ingressURL:  conf.IngressURL,
         filesURL:    conf.FilesURL,
@@ -129,12 +147,67 @@ func (sdk mfSDK) authenticate() (string, error) {
     if sdk.credentials.Email != "" && sdk.credentials.Password != "" {
         auth := []byte(sdk.credentials.Email + ":" + sdk.credentials.Password)
         return base64.StdEncoding.EncodeToString(auth), nil
-    } else if sdk.credentials.ApiKey != "" && sdk.credentials.Email != "" {
-        auth := []byte(sdk.credentials.Email + ":" + sdk.credentials.ApiKey)
+    } else if sdk.credentials.APIKey != "" && sdk.credentials.Email != "" {
+        auth := []byte(sdk.credentials.Email + ":" + sdk.credentials.APIKey)
         return base64.StdEncoding.EncodeToString(auth), nil
     } else if sdk.credentials.OrganisationToken != "" {
         auth := []byte(":" + sdk.credentials.OrganisationToken)
         return base64.StdEncoding.EncodeToString(auth), nil
     }
     return "", errors.New("Empty credentials")
+}
+
+func (sdk mfSDK) getOrganizationSlug(multiple bool) (string, error) {
+    endpoint := "auth/me"
+    url := fmt.Sprintf("%s/%s", sdk.apiURL, endpoint)
+
+    req, err := http.NewRequest(http.MethodGet, url, nil)
+    if err != nil {
+        return "", err
+    }
+    resp, err := sdk.makeRequest(req)
+    if err != nil {
+        return "", err
+    }
+    var ur UserRes
+    if err := json.Unmarshal(resp, &ur); err != nil {
+        return "", err
+    }
+    if multiple {
+        var list []string
+        for _, organization := range ur.Organizations {
+            list = append(list, organization.Slug)
+        }
+        organizationslug := fmt.Sprint(list)
+        return organizationslug, nil
+    }
+    return ur.Organizations[0].Slug, nil
+}
+
+func (sdk mfSDK) getProjectSlugByName(name string) (string, error) {
+    projects, err := sdk.ListProject()
+    if err != nil {
+        return "", nil
+    }
+    for _, project := range projects.Data {
+        if name == project.Name {
+            return project.Slug, nil
+        }
+        return "", nil
+    }
+    return "", nil
+}
+
+func (sdk mfSDK) getProjectSlugByID(id int) (string, error) {
+    projects, err := sdk.ListProject()
+    if err != nil {
+        return "", nil
+    }
+    for _, project := range projects.Data {
+        if id == project.ID {
+            return project.Slug, nil
+        }
+        return "", nil
+    }
+    return "", nil
 }
