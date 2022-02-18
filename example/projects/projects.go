@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	mem "github.com/0x6f736f646f/memfault-go/pkg/memfault"
+	mem "github.com/0x6f736f646f/memfault-go/pkg"
 )
 
 var (
@@ -28,8 +28,8 @@ func main() {
 	memfault := mem.NewSDK(conf)
 
 	payload := mem.Project{
-		Name:     "SmartSdinkamakeabc",
-		Slug:     "smartsdinkmskeabc",
+		Name:     "smartsink",
+		Slug:     "smartsink",
 		Os:       "FreeRTOS",
 		Platform: "nRF52",
 	}
@@ -70,9 +70,9 @@ func main() {
 
 	fmt.Println(response7)
 
-	response5, err := memfault.DeleteProject(payload)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(response5)
+	// response5, err := memfault.DeleteProject(payload)
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
+	// fmt.Println(response5)
 }

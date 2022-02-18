@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	mem "github.com/0x6f736f646f/memfault-go/pkg/memfault"
+	mem "github.com/0x6f736f646f/memfault-go/pkg"
 )
 
 var (
