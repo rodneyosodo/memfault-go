@@ -1,0 +1,637 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>memfault: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">github.com/0x6f736f646f/memfault-go/pkg/memfault/auth.go (0.0%)</option>
+				
+				<option value="file1">github.com/0x6f736f646f/memfault-go/pkg/memfault/memfault.go (52.4%)</option>
+				
+				<option value="file2">github.com/0x6f736f646f/memfault-go/pkg/memfault/projects.go (24.8%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">no coverage</span>
+				<span class="cov1">low coverage</span>
+				<span class="cov2">*</span>
+				<span class="cov3">*</span>
+				<span class="cov4">*</span>
+				<span class="cov5">*</span>
+				<span class="cov6">*</span>
+				<span class="cov7">*</span>
+				<span class="cov8">*</span>
+				<span class="cov9">*</span>
+				<span class="cov10">high coverage</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package memfault
+
+import (
+    "encoding/json"
+    "fmt"
+    "net/http"
+    "strings"
+)
+
+// GetMe Return information about the logged in User
+func (sdk mfSDK) GetMe() (UserRes, error) <span class="cov0" title="0">{
+    var ur UserRes
+    endpoint := "auth/me"
+    url := fmt.Sprintf("%s/%s", sdk.apiURL, endpoint)
+
+    req, err := http.NewRequest(http.MethodGet, url, nil)
+    if err != nil </span><span class="cov0" title="0">{
+        return ur, err
+    }</span>
+    <span class="cov0" title="0">resp, err := sdk.makeRequest(req)
+    if err != nil </span><span class="cov0" title="0">{
+        return ur, err
+    }</span>
+    <span class="cov0" title="0">if err := json.Unmarshal(resp, &amp;ur); err != nil </span><span class="cov0" title="0">{
+        return ur, err
+    }</span>
+    <span class="cov0" title="0">return ur, err</span>
+
+}
+
+// GenerateUserAPIKey generates (or re-generate) an API Key for logged in User.
+// To generate this without logging into Memfault, you may use HTTP Basic Auth to call this API.
+func (sdk mfSDK) GenerateUserAPIKey() (UserAPIKeyRes, error) <span class="cov0" title="0">{
+    var akr UserAPIKeyRes
+    endpoint := "auth/api_key"
+    url := fmt.Sprintf("%s/%s", sdk.apiURL, endpoint)
+    payload := strings.NewReader(``)
+
+    req, err := http.NewRequest(http.MethodPost, url, payload)
+    if err != nil </span><span class="cov0" title="0">{
+        return akr, err
+    }</span>
+    <span class="cov0" title="0">resp, err := sdk.makeRequest(req)
+    if err != nil </span><span class="cov0" title="0">{
+        return akr, err
+    }</span>
+    <span class="cov0" title="0">if err := json.Unmarshal(resp, &amp;akr); err != nil </span><span class="cov0" title="0">{
+        return akr, err
+    }</span>
+
+    <span class="cov0" title="0">return akr, nil</span>
+}
+
+// GetUserAPIKey Get a previously generated API Key for the logged in User
+func (sdk mfSDK) GetUserAPIKey() (UserAPIKeyRes, error) <span class="cov0" title="0">{
+    var akr UserAPIKeyRes
+    endpoint := "auth/api_key"
+    url := fmt.Sprintf("%s/%s", sdk.apiURL, endpoint)
+
+    req, err := http.NewRequest(http.MethodGet, url, nil)
+    if err != nil </span><span class="cov0" title="0">{
+        return akr, err
+    }</span>
+    <span class="cov0" title="0">resp, err := sdk.makeRequest(req)
+    if err != nil </span><span class="cov0" title="0">{
+        return akr, err
+    }</span>
+    <span class="cov0" title="0">if err := json.Unmarshal(resp, &amp;akr); err != nil </span><span class="cov0" title="0">{
+        return akr, err
+    }</span>
+
+    <span class="cov0" title="0">return akr, nil</span>
+}
+
+// DeleteUserAPIKey Invalidate the previously generated API Key for the logged in User and do not create another one
+func (sdk mfSDK) DeleteUserAPIKey() (string, error) <span class="cov0" title="0">{
+    endpoint := "auth/api_key"
+    url := fmt.Sprintf("%s/%s", sdk.apiURL, endpoint)
+    payload := strings.NewReader(``)
+
+    req, err := http.NewRequest(http.MethodDelete, url, payload)
+    if err != nil </span><span class="cov0" title="0">{
+        return "", err
+    }</span>
+    <span class="cov0" title="0">_, err = sdk.makeRequest(req)
+    if err != nil </span><span class="cov0" title="0">{
+        return "", err
+    }</span>
+    <span class="cov0" title="0">return "DELETED", nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">// Copyright (c) Mainflux
+// SPDX-License-Identifier: Apache-2.0
+
+package memfault
+
+import (
+    "encoding/base64"
+    "encoding/json"
+    "errors"
+    "fmt"
+    "io/ioutil"
+    "net/http"
+    "time"
+)
+
+// ContentType represents all possible content types.
+type ContentType string
+
+var _ SDK = (*mfSDK)(nil)
+
+// SDK contains Mainflux API.
+type SDK interface {
+    // GetMe Return information about the logged in User
+    GetMe() (UserRes, error)
+
+    // Generate a user api key
+    GenerateUserAPIKey() (UserAPIKeyRes, error)
+
+    // Get a previously generated API Key for the logged in User
+    GetUserAPIKey() (UserAPIKeyRes, error)
+
+    // Invalidate the previously generated API Key for the logged in User and do not create another one
+    DeleteUserAPIKey() (string, error)
+
+    // Creates a Project under the given Organization
+    CreateProject(project Project) (CreateProjectRes, error)
+
+    // List the Projects under a given Organization
+    ListProject() (ListProjectRes, error)
+
+    // Retrieves a Project under a given Organization
+    RetrieveProject(projectSlug string) (CreateProjectRes, error)
+
+    // Update a Project under a given Organization
+    UpdateProject(project Project) (CreateProjectRes, error)
+
+    // Delete a Project under a given Organization
+    DeleteProject(project Project) (string, error)
+
+    // Return the Project Client Key
+    GetProjectClientKey(projectSlug string) (UserAPIKeyRes, error)
+
+    // Regenerate the Project Client Key
+    RefreshProjectClientKey(projectSlug string) (UserAPIKeyRes, error)
+}
+
+// Credentials contains the credentials
+type Credentials struct {
+    Email             string `json:"email"`
+    Password          string `json:"password"`
+    APIKey            string `json:"api_key"`
+    OrganisationToken string `json:"organisation_token"`
+    ProjectKey        string `json:"project_key"`
+}
+
+type mfSDK struct {
+    apiURL         string
+    chunksURL      string
+    ingressURL     string
+    filesURL       string
+    credentials    Credentials
+    msgContentType ContentType
+    client         *http.Client
+}
+
+// Config contains sdk configuration parameters.
+type Config struct {
+    APIURL      string
+    ChunksURL   string
+    IngressURL  string
+    FilesURL    string
+    Credentials Credentials
+
+    MaxIdleConns    int
+    IdleConnTimeout time.Duration
+}
+
+// Project struct
+type Project struct {
+    Name     string `json:"name"`
+    Slug     string `json:"slug"`
+    Os       string `json:"os"`
+    Platform string `json:"platform"`
+}
+
+// NewSDK returns new mainflux SDK instance.
+func NewSDK(conf Config) SDK <span class="cov1" title="1">{
+    return &amp;mfSDK{
+        apiURL:      conf.APIURL,
+        chunksURL:   conf.ChunksURL,
+        ingressURL:  conf.IngressURL,
+        filesURL:    conf.FilesURL,
+        credentials: conf.Credentials,
+
+        client: &amp;http.Client{
+            Transport: &amp;http.Transport{
+                MaxIdleConns:    conf.MaxIdleConns,
+                IdleConnTimeout: conf.IdleConnTimeout,
+            },
+        },
+    }
+}</span>
+
+func (sdk mfSDK) makeRequest(req *http.Request) ([]byte, error) <span class="cov10" title="4">{
+    token, err := sdk.authenticate()
+    if err != nil </span><span class="cov0" title="0">{
+        return nil, err
+    }</span>
+    <span class="cov10" title="4">resp, err := sdk.sendRequest(req, token)
+    if err != nil </span><span class="cov0" title="0">{
+        return nil, err
+    }</span>
+
+    <span class="cov10" title="4">body, err := ioutil.ReadAll(resp.Body)
+    if err != nil </span><span class="cov0" title="0">{
+        return nil, err
+    }</span>
+    <span class="cov10" title="4">defer resp.Body.Close()
+    return body, nil</span>
+}
+
+func (sdk mfSDK) sendRequest(req *http.Request, token string) (*http.Response, error) <span class="cov10" title="4">{
+    if token != "" </span><span class="cov10" title="4">{
+        req.Header.Add("Authorization", "Basic "+token)
+    }</span>
+
+    <span class="cov10" title="4">req.Header.Add("Content-Type", "application/json")
+
+    res, err := sdk.client.Do(req)
+    if err != nil </span><span class="cov0" title="0">{
+        return res, err
+    }</span>
+    <span class="cov10" title="4">return res, nil</span>
+}
+
+func (sdk mfSDK) authenticate() (string, error) <span class="cov10" title="4">{
+    if sdk.credentials.Email != "" &amp;&amp; sdk.credentials.Password != "" </span><span class="cov10" title="4">{
+        auth := []byte(sdk.credentials.Email + ":" + sdk.credentials.Password)
+        return base64.StdEncoding.EncodeToString(auth), nil
+    }</span> else<span class="cov0" title="0"> if sdk.credentials.APIKey != "" &amp;&amp; sdk.credentials.Email != "" </span><span class="cov0" title="0">{
+        auth := []byte(sdk.credentials.Email + ":" + sdk.credentials.APIKey)
+        return base64.StdEncoding.EncodeToString(auth), nil
+    }</span> else<span class="cov0" title="0"> if sdk.credentials.OrganisationToken != "" </span><span class="cov0" title="0">{
+        auth := []byte(":" + sdk.credentials.OrganisationToken)
+        return base64.StdEncoding.EncodeToString(auth), nil
+    }</span>
+    <span class="cov0" title="0">return "", errors.New("Empty credentials")</span>
+}
+
+func (sdk mfSDK) getOrganizationSlug(multiple bool) (string, error) <span class="cov5" title="2">{
+    endpoint := "auth/me"
+    url := fmt.Sprintf("%s/%s", sdk.apiURL, endpoint)
+
+    req, err := http.NewRequest(http.MethodGet, url, nil)
+    if err != nil </span><span class="cov0" title="0">{
+        return "", err
+    }</span>
+    <span class="cov5" title="2">resp, err := sdk.makeRequest(req)
+    if err != nil </span><span class="cov0" title="0">{
+        return "", err
+    }</span>
+    <span class="cov5" title="2">var ur UserRes
+    if err := json.Unmarshal(resp, &amp;ur); err != nil </span><span class="cov0" title="0">{
+        return "", err
+    }</span>
+    <span class="cov5" title="2">if multiple </span><span class="cov0" title="0">{
+        var list []string
+        for _, organization := range ur.Organizations </span><span class="cov0" title="0">{
+            list = append(list, organization.Slug)
+        }</span>
+        <span class="cov0" title="0">organizationslug := fmt.Sprint(list)
+        return organizationslug, nil</span>
+    }
+    <span class="cov5" title="2">return ur.Organizations[0].Slug, nil</span>
+}
+
+func (sdk mfSDK) getProjectSlugByName(name string) (string, error) <span class="cov1" title="1">{
+    projects, err := sdk.ListProject()
+    if err != nil </span><span class="cov0" title="0">{
+        return "", nil
+    }</span>
+    <span class="cov1" title="1">for _, project := range projects.Data </span><span class="cov1" title="1">{
+        if name == project.Name </span><span class="cov1" title="1">{
+            return project.Slug, nil
+        }</span>
+        <span class="cov0" title="0">return "", nil</span>
+    }
+    <span class="cov0" title="0">return "", nil</span>
+}
+
+func (sdk mfSDK) getProjectSlugByID(id int) (string, error) <span class="cov0" title="0">{
+    projects, err := sdk.ListProject()
+    if err != nil </span><span class="cov0" title="0">{
+        return "", nil
+    }</span>
+    <span class="cov0" title="0">for _, project := range projects.Data </span><span class="cov0" title="0">{
+        if id == project.ID </span><span class="cov0" title="0">{
+            return project.Slug, nil
+        }</span>
+        <span class="cov0" title="0">return "", nil</span>
+    }
+    <span class="cov0" title="0">return "", nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package memfault
+
+import (
+    "encoding/json"
+    "errors"
+    "fmt"
+    "net/http"
+    "strings"
+)
+
+// CreateProject creates a Project under the given Organization
+func (sdk mfSDK) CreateProject(project Project) (CreateProjectRes, error) <span class="cov8" title="1">{
+    var exists bool
+    var cpr CreateProjectRes
+    var cpaer CreateProjectAlreadyExistRes
+
+    slug, err := sdk.getProjectSlugByName(project.Name)
+    if err != nil </span><span class="cov0" title="0">{
+        return cpr, nil
+    }</span>
+    <span class="cov8" title="1">if slug == project.Slug </span><span class="cov8" title="1">{
+        exists = true
+    }</span>
+    <span class="cov8" title="1">data, err := json.Marshal(project)
+    if err != nil </span><span class="cov0" title="0">{
+        return cpr, err
+    }</span>
+    <span class="cov8" title="1">payload := strings.NewReader(string(data))
+    organizationslug, err := sdk.getOrganizationSlug(false)
+    if err != nil </span><span class="cov0" title="0">{
+        return cpr, err
+    }</span>
+    <span class="cov8" title="1">endpoint := "api/v0/organizations/" + string(organizationslug) + "/projects"
+    url := fmt.Sprintf("%s/%s", sdk.apiURL, endpoint)
+
+    req, err := http.NewRequest(http.MethodPost, url, payload)
+    if err != nil </span><span class="cov0" title="0">{
+        return cpr, err
+    }</span>
+    <span class="cov8" title="1">resp, err := sdk.makeRequest(req)
+    if err != nil </span><span class="cov0" title="0">{
+        return cpr, err
+    }</span>
+    <span class="cov8" title="1">if exists </span><span class="cov8" title="1">{
+        if err := json.Unmarshal(resp, &amp;cpaer); err != nil </span><span class="cov0" title="0">{
+            return cpr, err
+        }</span>
+        <span class="cov8" title="1">return cpr, errors.New(string(cpaer.Error.Message))</span>
+    }
+
+    <span class="cov0" title="0">if err := json.Unmarshal(resp, &amp;cpr); err != nil </span><span class="cov0" title="0">{
+        return cpr, err
+    }</span>
+    <span class="cov0" title="0">return cpr, nil</span>
+}
+
+// ListProject list the Projects under a given Organization
+func (sdk mfSDK) ListProject() (ListProjectRes, error) <span class="cov8" title="1">{
+    var lpr ListProjectRes
+    organizationslug, err := sdk.getOrganizationSlug(false)
+    if err != nil </span><span class="cov0" title="0">{
+        return lpr, err
+    }</span>
+    <span class="cov8" title="1">endpoint := "api/v0/organizations/" + string(organizationslug) + "/projects"
+    url := fmt.Sprintf("%s/%s", sdk.apiURL, endpoint)
+
+    req, err := http.NewRequest(http.MethodGet, url, nil)
+    if err != nil </span><span class="cov0" title="0">{
+        return lpr, err
+    }</span>
+    <span class="cov8" title="1">resp, err := sdk.makeRequest(req)
+    if err != nil </span><span class="cov0" title="0">{
+        return lpr, err
+    }</span>
+    <span class="cov8" title="1">if err := json.Unmarshal(resp, &amp;lpr); err != nil </span><span class="cov0" title="0">{
+        return lpr, err
+    }</span>
+    <span class="cov8" title="1">return lpr, nil</span>
+}
+
+// RetrieveProject retrieve a Project under a given Organization
+func (sdk mfSDK) RetrieveProject(projectSlug string) (CreateProjectRes, error) <span class="cov0" title="0">{
+    var cpr CreateProjectRes
+    organizationslug, err := sdk.getOrganizationSlug(false)
+    if err != nil </span><span class="cov0" title="0">{
+        return cpr, err
+    }</span>
+    <span class="cov0" title="0">endpoint := "api/v0/organizations/" + string(organizationslug) + "/projects/" + projectSlug
+    url := fmt.Sprintf("%s/%s", sdk.apiURL, endpoint)
+
+    req, err := http.NewRequest(http.MethodGet, url, nil)
+    if err != nil </span><span class="cov0" title="0">{
+        return cpr, err
+    }</span>
+    <span class="cov0" title="0">resp, err := sdk.makeRequest(req)
+    if err != nil </span><span class="cov0" title="0">{
+        return cpr, err
+    }</span>
+    <span class="cov0" title="0">if err := json.Unmarshal(resp, &amp;cpr); err != nil </span><span class="cov0" title="0">{
+        return cpr, err
+    }</span>
+    <span class="cov0" title="0">return cpr, nil</span>
+}
+
+// UpdateProject updates a Project under a given Organization
+func (sdk mfSDK) UpdateProject(project Project) (CreateProjectRes, error) <span class="cov0" title="0">{
+    var cpr CreateProjectRes
+    organizationslug, err := sdk.getOrganizationSlug(false)
+    if err != nil </span><span class="cov0" title="0">{
+        return cpr, err
+    }</span>
+    <span class="cov0" title="0">projectSlug, err := sdk.getProjectSlugByName(project.Name)
+    if err != nil </span><span class="cov0" title="0">{
+        return cpr, nil
+    }</span>
+    <span class="cov0" title="0">data, err := json.Marshal(project)
+    if err != nil </span><span class="cov0" title="0">{
+        return cpr, err
+    }</span>
+    <span class="cov0" title="0">payload := strings.NewReader(string(data))
+
+    endpoint := "api/v0/organizations/" + string(organizationslug) + "/projects/" + projectSlug
+    url := fmt.Sprintf("%s/%s", sdk.apiURL, endpoint)
+
+    req, err := http.NewRequest(http.MethodPatch, url, payload)
+    if err != nil </span><span class="cov0" title="0">{
+        return cpr, err
+    }</span>
+    <span class="cov0" title="0">resp, err := sdk.makeRequest(req)
+    if err != nil </span><span class="cov0" title="0">{
+        return cpr, err
+    }</span>
+    <span class="cov0" title="0">if err := json.Unmarshal(resp, &amp;cpr); err != nil </span><span class="cov0" title="0">{
+        return cpr, err
+    }</span>
+    <span class="cov0" title="0">return cpr, nil</span>
+}
+
+// DeleteProject Delete a Project under a given Organization
+func (sdk mfSDK) DeleteProject(project Project) (string, error) <span class="cov0" title="0">{
+    organizationslug, err := sdk.getOrganizationSlug(false)
+    if err != nil </span><span class="cov0" title="0">{
+        return "", err
+    }</span>
+    <span class="cov0" title="0">projectSlug, err := sdk.getProjectSlugByName(project.Name)
+    if err != nil </span><span class="cov0" title="0">{
+        return "", nil
+    }</span>
+
+    <span class="cov0" title="0">endpoint := "api/v0/organizations/" + string(organizationslug) + "/projects/" + projectSlug
+    url := fmt.Sprintf("%s/%s", sdk.apiURL, endpoint)
+
+    payload := strings.NewReader(``)
+
+    req, err := http.NewRequest(http.MethodDelete, url, payload)
+    if err != nil </span><span class="cov0" title="0">{
+        return "", err
+    }</span>
+    <span class="cov0" title="0">_, err = sdk.makeRequest(req)
+    if err != nil </span><span class="cov0" title="0">{
+        return "", err
+    }</span>
+    <span class="cov0" title="0">return "DELETED", nil</span>
+}
+
+// GetProjectClientKey Return the Project Client Key
+func (sdk mfSDK) GetProjectClientKey(projectSlug string) (UserAPIKeyRes, error) <span class="cov0" title="0">{
+    var uakr UserAPIKeyRes
+    organizationslug, err := sdk.getOrganizationSlug(false)
+    if err != nil </span><span class="cov0" title="0">{
+        return uakr, err
+    }</span>
+    <span class="cov0" title="0">endpoint := "api/v0/organizations/" + string(organizationslug) + "/projects/" + projectSlug + "/api_key"
+    url := fmt.Sprintf("%s/%s", sdk.apiURL, endpoint)
+
+    req, err := http.NewRequest(http.MethodGet, url, nil)
+    if err != nil </span><span class="cov0" title="0">{
+        return uakr, err
+    }</span>
+    <span class="cov0" title="0">resp, err := sdk.makeRequest(req)
+    if err != nil </span><span class="cov0" title="0">{
+        return uakr, err
+    }</span>
+    <span class="cov0" title="0">if err := json.Unmarshal(resp, &amp;uakr); err != nil </span><span class="cov0" title="0">{
+        return uakr, err
+    }</span>
+    <span class="cov0" title="0">return uakr, nil</span>
+}
+
+// RefreshProjectClientKey Regenerate the Project Client Key
+func (sdk mfSDK) RefreshProjectClientKey(projectSlug string) (UserAPIKeyRes, error) <span class="cov0" title="0">{
+    var uakr UserAPIKeyRes
+    organizationslug, err := sdk.getOrganizationSlug(false)
+    if err != nil </span><span class="cov0" title="0">{
+        return uakr, err
+    }</span>
+    <span class="cov0" title="0">endpoint := "api/v0/organizations/" + string(organizationslug) + "/projects/" + projectSlug + "/api_key"
+    url := fmt.Sprintf("%s/%s", sdk.apiURL, endpoint)
+
+    payload := strings.NewReader(``)
+
+    req, err := http.NewRequest(http.MethodPost, url, payload)
+    if err != nil </span><span class="cov0" title="0">{
+        return uakr, err
+    }</span>
+    <span class="cov0" title="0">resp, err := sdk.makeRequest(req)
+    if err != nil </span><span class="cov0" title="0">{
+        return uakr, err
+    }</span>
+    <span class="cov0" title="0">if err := json.Unmarshal(resp, &amp;uakr); err != nil </span><span class="cov0" title="0">{
+        return uakr, err
+    }</span>
+    <span class="cov0" title="0">return uakr, nil</span>
+}
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>

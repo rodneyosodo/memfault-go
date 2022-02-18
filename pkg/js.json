@@ -1,0 +1,42 @@
+{
+    "data": {
+        "created_date": "2022-02-09T10:37:39.021949+00:00",
+        "slug": "smartsink",
+        "legacy_latest_api_enabled": false,
+        "integrations": [],
+        "alerts_enabled": true,
+        "updated_date": "2022-02-09T10:37:39.065456+00:00",
+        "count_deployments": 0,
+        "dashboard_enabled": false,
+        "device_link_strategies": [],
+        "primary_software_type": null,
+        "bugreport_export_enabled": true,
+        "metric_chart_enabled": false,
+        "chunks_debug_log_length": 0,
+        "api_key": "3kfvYHivnNzFGtlKnNdUAAhETQU77Ldp",
+        "multi_component_enabled": false,
+        "setup_details": {
+            "operating_system": [],
+            "compiler_other": null,
+            "build_toolchain": [],
+            "build_toolchain_other": null,
+            "additional_chips": null,
+            "programming_languages_other": null,
+            "debugging_toolchain": [],
+            "connectivity_other": null,
+            "primary_chip": null,
+            "compiler": [],
+            "connectivity": [],
+            "primary_chip_other": null,
+            "debugging_toolchain_other": null,
+            "gms_certification": null,
+            "operating_system_other": null,
+            "programming_languages": []
+        },
+        "versioning_scheme": "sequence",
+        "name": "SmartSink",
+        "os": "FreeRTOS",
+        "platform": "nRF52",
+        "id": 2222
+    }
+}

@@ -52,6 +52,10 @@ type SDK interface {
 
 	// Regenerate the Project Client Key
 	RefreshProjectClientKey(projectSlug string) (UserAPIKeyRes, error)
+
+	CreateCohort(project Project, cohort Cohort) (CreateCohortRes, error)
+
+	ListCohorts(project Project) (ListCohortRes, error)
 }
 
 // Credentials contains the credentials
@@ -93,6 +97,11 @@ type Project struct {
 	Platform string `json:"platform"`
 }
 
+type Cohort struct {
+	Name string `json:"name,omitempty"`
+	Slug string `json:"slug,omitempty"`
+}
+
 // NewSDK returns new mainflux SDK instance.
 func NewSDK(conf Config) SDK {
 	return &mfSDK{
@@ -111,22 +120,22 @@ func NewSDK(conf Config) SDK {
 	}
 }
 
-func (sdk mfSDK) makeRequest(req *http.Request) ([]byte, error) {
+func (sdk mfSDK) makeRequest(req *http.Request) ([]byte, int, error) {
 	token, err := sdk.authenticate()
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 	resp, err := sdk.sendRequest(req, token)
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 	defer resp.Body.Close()
-	return body, nil
+	return body, resp.StatusCode, nil
 }
 
 func (sdk mfSDK) sendRequest(req *http.Request, token string) (*http.Response, error) {
@@ -165,7 +174,7 @@ func (sdk mfSDK) getOrganizationSlug(multiple bool) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	resp, err := sdk.makeRequest(req)
+	resp, _, err := sdk.makeRequest(req)
 	if err != nil {
 		return "", err
 	}

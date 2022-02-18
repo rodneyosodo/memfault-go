@@ -12,7 +12,7 @@ import (
 func (sdk mfSDK) CreateProject(project Project) (CreateProjectRes, error) {
 	var exists bool
 	var cpr CreateProjectRes
-	var cpaer CreateProjectAlreadyExistRes
+	var er ErrorRes
 
 	slug, err := sdk.getProjectSlugByName(project.Name)
 	if err != nil {
@@ -37,15 +37,15 @@ func (sdk mfSDK) CreateProject(project Project) (CreateProjectRes, error) {
 	if err != nil {
 		return cpr, err
 	}
-	resp, err := sdk.makeRequest(req)
+	resp, _, err := sdk.makeRequest(req)
 	if err != nil {
 		return cpr, err
 	}
 	if exists {
-		if err := json.Unmarshal(resp, &cpaer); err != nil {
+		if err := json.Unmarshal(resp, &er); err != nil {
 			return cpr, err
 		}
-		return cpr, errors.New(string(cpaer.Error.Message))
+		return cpr, errors.New(string(er.Error.Message))
 	}
 
 	if err := json.Unmarshal(resp, &cpr); err != nil {
@@ -68,7 +68,7 @@ func (sdk mfSDK) ListProject() (ListProjectRes, error) {
 	if err != nil {
 		return lpr, err
 	}
-	resp, err := sdk.makeRequest(req)
+	resp, _, err := sdk.makeRequest(req)
 	if err != nil {
 		return lpr, err
 	}
@@ -92,7 +92,7 @@ func (sdk mfSDK) RetrieveProject(projectSlug string) (CreateProjectRes, error) {
 	if err != nil {
 		return cpr, err
 	}
-	resp, err := sdk.makeRequest(req)
+	resp, _, err := sdk.makeRequest(req)
 	if err != nil {
 		return cpr, err
 	}
@@ -126,7 +126,7 @@ func (sdk mfSDK) UpdateProject(project Project) (CreateProjectRes, error) {
 	if err != nil {
 		return cpr, err
 	}
-	resp, err := sdk.makeRequest(req)
+	resp, _, err := sdk.makeRequest(req)
 	if err != nil {
 		return cpr, err
 	}
@@ -156,7 +156,7 @@ func (sdk mfSDK) DeleteProject(project Project) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	_, err = sdk.makeRequest(req)
+	_, _, err = sdk.makeRequest(req)
 	if err != nil {
 		return "", err
 	}
@@ -177,7 +177,7 @@ func (sdk mfSDK) GetProjectClientKey(projectSlug string) (UserAPIKeyRes, error) 
 	if err != nil {
 		return uakr, err
 	}
-	resp, err := sdk.makeRequest(req)
+	resp, _, err := sdk.makeRequest(req)
 	if err != nil {
 		return uakr, err
 	}
@@ -203,7 +203,7 @@ func (sdk mfSDK) RefreshProjectClientKey(projectSlug string) (UserAPIKeyRes, err
 	if err != nil {
 		return uakr, err
 	}
-	resp, err := sdk.makeRequest(req)
+	resp, _, err := sdk.makeRequest(req)
 	if err != nil {
 		return uakr, err
 	}

@@ -17,7 +17,7 @@ func (sdk mfSDK) GetMe() (UserRes, error) {
 	if err != nil {
 		return ur, err
 	}
-	resp, err := sdk.makeRequest(req)
+	resp, _, err := sdk.makeRequest(req)
 	if err != nil {
 		return ur, err
 	}
@@ -39,7 +39,7 @@ func (sdk mfSDK) GenerateUserAPIKey() (UserAPIKeyRes, error) {
 	if err != nil {
 		return akr, err
 	}
-	resp, err := sdk.makeRequest(req)
+	resp, _, err := sdk.makeRequest(req)
 	if err != nil {
 		return akr, err
 	}
@@ -60,7 +60,7 @@ func (sdk mfSDK) GetUserAPIKey() (UserAPIKeyRes, error) {
 	if err != nil {
 		return akr, err
 	}
-	resp, err := sdk.makeRequest(req)
+	resp, _, err := sdk.makeRequest(req)
 	if err != nil {
 		return akr, err
 	}
@@ -81,7 +81,7 @@ func (sdk mfSDK) DeleteUserAPIKey() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	_, err = sdk.makeRequest(req)
+	_, _, err = sdk.makeRequest(req)
 	if err != nil {
 		return "", err
 	}

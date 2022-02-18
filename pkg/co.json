@@ -1,0 +1,18 @@
+{
+  "data": {
+    "bypass_primary_software_type_check": false,
+    "bypass_version_checks": false,
+    "count_active_deployments": 0,
+    "count_devices": 0,
+    "count_staged_devices": 0,
+    "created_date": "2022-02-17T19:16:21.692461+00:00",
+    "id": 164814,
+    "ignore_traces": false,
+    "last_deployment": null,
+    "name": "SmartSdinkamakeabc",
+    "return_equal_latest_releases": false,
+    "slug": "smartsdinkmskeabc",
+    "updated_date": "2022-02-17T19:16:21.692478+00:00",
+    "updates_enabled": true
+  }
+}

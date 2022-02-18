@@ -1,0 +1,28 @@
+{
+    "has_accepted_terms_of_service": true,
+    "name": "Rodney Osodo",
+    "organization_acls": [
+        {
+            "customer_support": false,
+            "admin": true,
+            "organization ": {
+                "slug": "qualislabs",
+                "id": 1889,
+                "name": "Qualislabs"
+            }
+        }
+    ],
+    "created_date": "2022-02-05T20:13:58.791425+00:00",
+    "updated_date": "2022-02-09T11:45:12.220321+00:00",
+    "impersonator": null,
+    "id": 3048,
+    "email": "rodneydav@gmail.com",
+    "has_accepted_privacy_notice": true,
+    "organizations": [
+        {
+            "slug": "qualislabs",
+            "id": 1889,
+            "name": "Qualislabs"
+        }
+    ]
+}
