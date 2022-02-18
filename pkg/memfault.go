@@ -52,9 +52,7 @@ type SDK interface {
 
 	// Regenerate the Project Client Key
 	RefreshProjectClientKey(projectSlug string) (UserAPIKeyRes, error)
-
 	CreateCohort(project Project, cohort Cohort) (CreateCohortRes, error)
-
 	ListCohorts(project Project) (ListCohortRes, error)
 }
 
