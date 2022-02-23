@@ -9,9 +9,5 @@ enabled = true
   dependencies_vendored = true
 
 [[transformers]]
-name = "gofumpt"
-enabled = true
-
-[[transformers]]
 name = "gofmt"
 enabled = true
