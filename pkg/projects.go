@@ -11,9 +11,6 @@ import (
 // CreateProject creates a Project under the given Organization
 func (sdk mfSDK) CreateProject(project Project) (CreateProjectRes, error) {
 	var exists bool
-	var cpr CreateProjectRes
-	var er ErrorRes
-
 	slug, err := sdk.getProjectSlugByName(project.Name)
 	if err != nil {
 		return cpr, nil
@@ -56,7 +53,6 @@ func (sdk mfSDK) CreateProject(project Project) (CreateProjectRes, error) {
 
 // ListProject list the Projects under a given Organization
 func (sdk mfSDK) ListProject() (ListProjectRes, error) {
-	var lpr ListProjectRes
 	organizationslug, err := sdk.getOrganizationSlug(false)
 	if err != nil {
 		return lpr, err
@@ -80,7 +76,6 @@ func (sdk mfSDK) ListProject() (ListProjectRes, error) {
 
 // RetrieveProject retrieve a Project under a given Organization
 func (sdk mfSDK) RetrieveProject(projectSlug string) (CreateProjectRes, error) {
-	var cpr CreateProjectRes
 	organizationslug, err := sdk.getOrganizationSlug(false)
 	if err != nil {
 		return cpr, err
@@ -104,7 +99,6 @@ func (sdk mfSDK) RetrieveProject(projectSlug string) (CreateProjectRes, error) {
 
 // UpdateProject updates a Project under a given Organization
 func (sdk mfSDK) UpdateProject(project Project) (CreateProjectRes, error) {
-	var cpr CreateProjectRes
 	organizationslug, err := sdk.getOrganizationSlug(false)
 	if err != nil {
 		return cpr, err
@@ -165,7 +159,6 @@ func (sdk mfSDK) DeleteProject(project Project) (string, error) {
 
 // GetProjectClientKey Return the Project Client Key
 func (sdk mfSDK) GetProjectClientKey(projectSlug string) (UserAPIKeyRes, error) {
-	var uakr UserAPIKeyRes
 	organizationslug, err := sdk.getOrganizationSlug(false)
 	if err != nil {
 		return uakr, err
@@ -189,7 +182,6 @@ func (sdk mfSDK) GetProjectClientKey(projectSlug string) (UserAPIKeyRes, error) 
 
 // RefreshProjectClientKey Regenerate the Project Client Key
 func (sdk mfSDK) RefreshProjectClientKey(projectSlug string) (UserAPIKeyRes, error) {
-	var uakr UserAPIKeyRes
 	organizationslug, err := sdk.getOrganizationSlug(false)
 	if err != nil {
 		return uakr, err

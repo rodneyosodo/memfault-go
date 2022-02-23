@@ -128,6 +128,7 @@ type ListProjectRes struct {
 	Paging paging        `json:"paging,omitempty"`
 }
 
+// CohortData struct
 type CohortData struct {
 	ByPassPrimarySoftwareTypeCheck bool      `json:"bypass_primary_software_type_check,omitempty"`
 	ByPassVersionChecks            bool      `json:"bypass_version_checks,omitempty"`

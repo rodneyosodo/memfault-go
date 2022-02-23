@@ -18,6 +18,13 @@ type ContentType string
 
 var _ SDK = (*mfSDK)(nil)
 
+var (
+	cpr  CreateProjectRes
+	lpr  ListProjectRes
+	uakr UserAPIKeyRes
+	er   ErrorRes
+)
+
 // SDK contains Mainflux API.
 type SDK interface {
 	// GetMe Return information about the logged in User
@@ -56,6 +63,12 @@ type SDK interface {
 	CreateCohort(project Project, cohort Cohort) (CreateCohortRes, error)
 
 	ListCohorts(project Project) (ListCohortRes, error)
+
+	RetrieveCohorts(project Project, cohort Cohort) (CreateCohortRes, error)
+
+	UpdateCohorts(project Project, cohort Cohort, cohortslug string) (CreateCohortRes, error)
+
+	DeleteCohorts(project Project, cohort Cohort) (string, error)
 }
 
 // Credentials contains the credentials
@@ -97,6 +110,7 @@ type Project struct {
 	Platform string `json:"platform"`
 }
 
+// Cohort struct
 type Cohort struct {
 	Name string `json:"name,omitempty"`
 	Slug string `json:"slug,omitempty"`
@@ -129,7 +143,6 @@ func (sdk mfSDK) makeRequest(req *http.Request) ([]byte, int, error) {
 	if err != nil {
 		return nil, 0, err
 	}
-
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return nil, 0, err
@@ -142,9 +155,7 @@ func (sdk mfSDK) sendRequest(req *http.Request, token string) (*http.Response, e
 	if token != "" {
 		req.Header.Add("Authorization", "Basic "+token)
 	}
-
 	req.Header.Add("Content-Type", "application/json")
-
 	res, err := sdk.client.Do(req)
 	if err != nil {
 		return res, err
@@ -169,7 +180,6 @@ func (sdk mfSDK) authenticate() (string, error) {
 func (sdk mfSDK) getOrganizationSlug(multiple bool) (string, error) {
 	endpoint := "auth/me"
 	url := fmt.Sprintf("%s/%s", sdk.apiURL, endpoint)
-
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return "", err
@@ -217,6 +227,18 @@ func (sdk mfSDK) getProjectSlugByID(id int) (string, error) {
 			return project.Slug, nil
 		}
 		return "", nil
+	}
+	return "", nil
+}
+func (sdk mfSDK) getCohortSlug(project Project, name string) (string, error) {
+	cohorts, err := sdk.ListCohorts(project)
+	if err != nil {
+		return "", nil
+	}
+	for _, cohort := range cohorts.Data {
+		if name == cohort.Name {
+			return cohort.Slug, nil
+		}
 	}
 	return "", nil
 }

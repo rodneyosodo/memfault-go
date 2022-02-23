@@ -9,7 +9,6 @@ import (
 
 // GetMe Return information about the logged in User
 func (sdk mfSDK) GetMe() (UserRes, error) {
-	var ur UserRes
 	endpoint := "auth/me"
 	url := fmt.Sprintf("%s/%s", sdk.apiURL, endpoint)
 
@@ -30,7 +29,6 @@ func (sdk mfSDK) GetMe() (UserRes, error) {
 // GenerateUserAPIKey generates (or re-generate) an API Key for logged in User.
 // To generate this without logging into Memfault, you may use HTTP Basic Auth to call this API.
 func (sdk mfSDK) GenerateUserAPIKey() (UserAPIKeyRes, error) {
-	var akr UserAPIKeyRes
 	endpoint := "auth/api_key"
 	url := fmt.Sprintf("%s/%s", sdk.apiURL, endpoint)
 	payload := strings.NewReader(``)
@@ -52,7 +50,6 @@ func (sdk mfSDK) GenerateUserAPIKey() (UserAPIKeyRes, error) {
 
 // GetUserAPIKey Get a previously generated API Key for the logged in User
 func (sdk mfSDK) GetUserAPIKey() (UserAPIKeyRes, error) {
-	var akr UserAPIKeyRes
 	endpoint := "auth/api_key"
 	url := fmt.Sprintf("%s/%s", sdk.apiURL, endpoint)
 
