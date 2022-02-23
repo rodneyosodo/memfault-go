@@ -35,8 +35,12 @@ func main() {
 		Platform: "nRF52",
 	}
 	cohort := mem.Cohort{
-		Name: "demo5",
-		Slug: "demo5",
+		Name: "Example cohort",
+		Slug: "example-cohort",
+	}
+	updatedcohort := mem.Cohort{
+		Name: "Updated Example cohort",
+		Slug: "updated-cohort",
 	}
 	response1, err := memfault.CreateCohort(project, cohort)
 	if err != nil {
@@ -59,4 +63,45 @@ func main() {
 		}
 		fmt.Print(string(b))
 	}
+
+	response6, err := memfault.ListDevicesINCohorts(project, cohort)
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		b, err := json.MarshalIndent(response6, "", "  ")
+		if err != nil {
+			fmt.Println(err)
+		}
+		fmt.Print(string(b))
+	}
+
+	response3, err := memfault.RetrieveCohorts(project, cohort)
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		b, err := json.MarshalIndent(response3, "", "  ")
+		if err != nil {
+			fmt.Println(err)
+		}
+		fmt.Print(string(b))
+	}
+
+	response4, err := memfault.UpdateCohorts(project, updatedcohort, "example-cohort")
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		b, err := json.MarshalIndent(response4, "", "  ")
+		if err != nil {
+			fmt.Println(err)
+		}
+		fmt.Print(string(b))
+	}
+
+	response5, err := memfault.DeleteCohorts(project, updatedcohort)
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Print(string(response5))
+	}
+
 }
